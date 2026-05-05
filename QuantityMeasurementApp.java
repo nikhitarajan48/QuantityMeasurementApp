@@ -55,6 +55,47 @@ public class QuantityMeasurementApp {
         }
     }
 
+     // ✅ UC3: NEW CLASS (ADD THIS BELOW)
+    enum LengthUnit {
+        FEET(1.0),
+        INCH(1.0 / 12.0);
+
+        private final double toFeetFactor;
+
+        LengthUnit(double factor) {
+            this.toFeetFactor = factor;
+        }
+
+        public double toFeet(double value) {
+            return value * toFeetFactor;
+        }
+    }
+
+    static class QuantityLength {
+        private final double value;
+        private final LengthUnit unit;
+
+        public QuantityLength(double value, LengthUnit unit) {
+            this.value = value;
+            this.unit = unit;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+
+            if (obj == null || this.getClass() != obj.getClass())
+                return false;
+
+            QuantityLength other = (QuantityLength) obj;
+
+            double thisFeet = this.unit.toFeet(this.value);
+            double otherFeet = other.unit.toFeet(other.value);
+
+            return Double.compare(thisFeet, otherFeet) == 0;
+        }
+    }
+
     // Main method to test equality
     public static void main(String[] args) {
 
@@ -72,6 +113,11 @@ public class QuantityMeasurementApp {
         Inch i3 = new Inch(1.0);
         Inch i4 = new Inch(2.0);
         System.out.println("Inch Equal (" + i3.equals(i4) + ")");
+
+         // UC3: Quantity Length
+        QuantityLength q1 = new QuantityLength(12.0, LengthUnit.INCH);
+        QuantityLength q2 = new QuantityLength(1.0, LengthUnit.FEET);
+        System.out.println("12 inch equals 1 foot (" + q1.equals(q2) + ")");
 
     }
 }
