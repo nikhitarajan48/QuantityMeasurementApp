@@ -55,10 +55,14 @@ public class QuantityMeasurementApp {
         }
     }
 
-     // ✅ UC3: NEW CLASS (ADD THIS BELOW)
-    enum LengthUnit {
+     // UC3: NEW CLASS
+        enum LengthUnit {
         FEET(1.0),
-        INCH(1.0 / 12.0);
+        INCH(1.0 / 12.0),
+
+        // UC4 additions
+        YARD(3.0),
+        CENTIMETER(0.393701 / 12.0);
 
         private final double toFeetFactor;
 
@@ -118,6 +122,17 @@ public class QuantityMeasurementApp {
         QuantityLength q1 = new QuantityLength(12.0, LengthUnit.INCH);
         QuantityLength q2 = new QuantityLength(1.0, LengthUnit.FEET);
         System.out.println("12 inch equals 1 foot (" + q1.equals(q2) + ")");
+
+        // UC4
+        System.out.println(
+            new QuantityLength(1.0, LengthUnit.YARD)
+            .equals(new QuantityLength(3.0, LengthUnit.FEET))
+        );
+
+        System.out.println(
+            new QuantityLength(1.0, LengthUnit.CENTIMETER)
+            .equals(new QuantityLength(0.393701, LengthUnit.INCH))
+        );
 
     }
 }
