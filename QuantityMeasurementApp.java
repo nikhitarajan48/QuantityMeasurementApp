@@ -142,6 +142,34 @@ public class QuantityMeasurementApp {
 
             return new QuantityLength(resultValue, this.unit);
         }
+        // UC7: Addition with target unit
+        public QuantityLength add(QuantityLength other, LengthUnit targetUnit) {
+
+            if (other == null) {
+                throw new IllegalArgumentException("Other quantity cannot be null");
+            }
+
+            if (targetUnit == null) {
+                throw new IllegalArgumentException("Target unit cannot be null");
+            }
+
+            if (!Double.isFinite(this.value) || !Double.isFinite(other.value)) {
+                throw new IllegalArgumentException("Invalid value");
+            }
+
+            // Convert both to feet
+            double thisInFeet = this.unit.toFeet(this.value);
+            double otherInFeet = other.unit.toFeet(other.value);
+
+            // Add
+            double sumInFeet = thisInFeet + otherInFeet;
+
+            // Convert to TARGET UNIT
+            double resultValue = sumInFeet / targetUnit.toFeet(1.0);
+
+            return new QuantityLength(resultValue, targetUnit);
+        }
+
     }
 
     // Main method to test equality
@@ -207,6 +235,22 @@ public class QuantityMeasurementApp {
         QuantityLength f = new QuantityLength(1.0, LengthUnit.INCH);
 
         System.out.println("2.54 cm + 1 inch = " + e.add(f).value + " " + e.unit);
+
+        // UC7 Output
+
+        QuantityLength x = new QuantityLength(1.0, LengthUnit.FEET);
+        QuantityLength y = new QuantityLength(12.0, LengthUnit.INCH);
+
+        System.out.println("Result in FEET: " + x.add(y, LengthUnit.FEET).value + " " + LengthUnit.FEET);
+
+        System.out.println("Result in INCH: " + x.add(y, LengthUnit.INCH).value + " " + LengthUnit.INCH);
+
+        System.out.println("Result in YARD: " + x.add(y, LengthUnit.YARD).value + " " + LengthUnit.YARD);
+
+        QuantityLength p = new QuantityLength(2.54, LengthUnit.CENTIMETER);
+        QuantityLength q = new QuantityLength(1.0, LengthUnit.INCH);
+
+        System.out.println("CM result: " + p.add(q, LengthUnit.CENTIMETER).value + " " + LengthUnit.CENTIMETER);
 
     }
 }
