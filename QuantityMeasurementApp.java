@@ -98,6 +98,23 @@ public class QuantityMeasurementApp {
 
             return Double.compare(thisFeet, otherFeet) == 0;
         }
+        // UC5: Unit Conversion Method
+        public static double convert(double value, LengthUnit source, LengthUnit target) {
+
+            if (!Double.isFinite(value)) {
+                throw new IllegalArgumentException("Invalid value");
+            }
+
+            if (source == null || target == null) {
+                throw new IllegalArgumentException("Unit cannot be null");
+            }
+
+            // Convert to base unit (feet)
+            double valueInFeet = source.toFeet(value);
+
+            // Convert to target unit
+            return valueInFeet / target.toFeet(1.0);
+        }
     }
 
     // Main method to test equality
@@ -133,6 +150,19 @@ public class QuantityMeasurementApp {
             new QuantityLength(1.0, LengthUnit.CENTIMETER)
             .equals(new QuantityLength(0.393701, LengthUnit.INCH))
         );
+
+        // UC5 Output
+        System.out.println("1 foot to inch: " +
+                QuantityLength.convert(1.0, LengthUnit.FEET, LengthUnit.INCH));
+
+        System.out.println("3 yard to feet: " +
+                QuantityLength.convert(3.0, LengthUnit.YARD, LengthUnit.FEET));
+
+        System.out.println("36 inch to yard: " +
+                QuantityLength.convert(36.0, LengthUnit.INCH, LengthUnit.YARD));
+
+        System.out.println("1 cm to inch: " +
+                QuantityLength.convert(1.0, LengthUnit.CENTIMETER, LengthUnit.INCH));
 
     }
 }
