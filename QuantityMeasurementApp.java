@@ -115,6 +115,33 @@ public class QuantityMeasurementApp {
             // Convert to target unit
             return valueInFeet / target.toFeet(1.0);
         }
+        // UC6: Addition of two lengths
+        public QuantityLength add(QuantityLength other) {
+
+            if (other == null) {
+                throw new IllegalArgumentException("Other quantity cannot be null");
+            }
+
+            if (!Double.isFinite(this.value) || !Double.isFinite(other.value)) {
+                throw new IllegalArgumentException("Invalid value");
+            }
+
+            if (this.unit == null || other.unit == null) {
+                throw new IllegalArgumentException("Unit cannot be null");
+            }
+
+            // Convert both to feet
+            double thisInFeet = this.unit.toFeet(this.value);
+            double otherInFeet = other.unit.toFeet(other.value);
+
+            // Add
+            double sumInFeet = thisInFeet + otherInFeet;
+
+            // Convert back to THIS unit
+            double resultValue = sumInFeet / this.unit.toFeet(1.0);
+
+            return new QuantityLength(resultValue, this.unit);
+        }
     }
 
     // Main method to test equality
@@ -163,6 +190,23 @@ public class QuantityMeasurementApp {
 
         System.out.println("1 cm to inch: " +
                 QuantityLength.convert(1.0, LengthUnit.CENTIMETER, LengthUnit.INCH));
+        
+        // UC6 Output
+
+        QuantityLength a = new QuantityLength(1.0, LengthUnit.FEET);
+        QuantityLength b = new QuantityLength(12.0, LengthUnit.INCH);
+
+        System.out.println("1 ft + 12 inch = " + a.add(b).value + " " + a.unit);
+
+        QuantityLength c = new QuantityLength(1.0, LengthUnit.YARD);
+        QuantityLength d = new QuantityLength(3.0, LengthUnit.FEET);
+
+        System.out.println("1 yard + 3 feet = " + c.add(d).value + " " + c.unit);
+
+        QuantityLength e = new QuantityLength(2.54, LengthUnit.CENTIMETER);
+        QuantityLength f = new QuantityLength(1.0, LengthUnit.INCH);
+
+        System.out.println("2.54 cm + 1 inch = " + e.add(f).value + " " + e.unit);
 
     }
 }
