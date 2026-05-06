@@ -165,7 +165,7 @@ public class QuantityMeasurementApp {
             double sumInFeet = thisInFeet + otherInFeet;
 
             // Convert to TARGET UNIT
-            double resultValue = sumInFeet / targetUnit.toFeet(1.0);
+            double resultValue = targetUnit.fromFeet(sumInFeet);
 
             return new QuantityLength(resultValue, targetUnit);
         }
